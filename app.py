@@ -9,9 +9,9 @@ from datetime import timedelta
 
 # Pilihan unit
 unit_options = {
-    "Unit 1": "https://github.com/aguskurniawan10/loadforecasting/raw/main/UNIT%201%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
-    "Unit 2": "https://github.com/aguskurniawan10/loadforecasting/raw/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
-    "Unit 3": "https://github.com/aguskurniawan10/loadforecasting/raw/main/UNIT%203%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx"
+    "Unit 1": "https://github.com/aguskurniawan10/loadforecasting/blob/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
+    "Unit 2": "https://github.com/aguskurniawan10/loadforecasting/blob/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
+    "Unit 3": "https://github.com/aguskurniawan10/loadforecasting/blob/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx"
 }
 
 # Streamlit App
