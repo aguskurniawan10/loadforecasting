@@ -1,14 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import pandas as pd
 import numpy as np
 import xgboost as xgb
 import streamlit as st
 import plotly.graph_objs as go
+import requests
+from io import BytesIO
 from datetime import timedelta
 
 # Pilihan unit
@@ -25,9 +21,14 @@ selected_unit = st.selectbox("Pilih Unit:", list(unit_options.keys()))
 # URL file Excel berdasarkan unit
 url = unit_options[selected_unit]
 
-# Baca file Excel dari URL
-df = pd.read_excel(url)
-df['TIME'] = pd.to_datetime(df['TIME'])
+# Baca file Excel dari URL dengan requests
+response = requests.get(url)
+if response.status_code == 200:
+    df = pd.read_excel(BytesIO(response.content))
+    df['TIME'] = pd.to_datetime(df['TIME'])
+else:
+    st.error("Gagal mengunduh data. Pastikan URL benar dan dapat diakses.")
+    st.stop()
 
 # Ganti nama kolom
 column_target = f'REALISASI MW {selected_unit.split()[1]}'
@@ -79,5 +80,4 @@ st.plotly_chart(fig)
 
 # Tampilkan tabel hasil prediksi
 st.subheader(f"Hasil Prediksi 7 Hari ke Depan untuk {selected_unit}")
-st.dataframe(df_future[['TIME', 'Prediksi Beban Gross']])
-
+st.dataframe(df_future[['ds', 'y_pred_xgb']])
