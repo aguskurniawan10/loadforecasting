@@ -9,9 +9,9 @@ from datetime import timedelta
 
 # Pilihan unit
 unit_options = {
-    "Unit 1": "https://github.com/aguskurniawan10/loadforecasting/blob/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
-    "Unit 2": "https://github.com/aguskurniawan10/loadforecasting/blob/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
-    "Unit 3": "https://github.com/aguskurniawan10/loadforecasting/blob/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx"
+    "Unit 1": "https://github.com/aguskurniawan10/loadforecasting/raw/main/UNIT%201%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
+    "Unit 2": "https://github.com/aguskurniawan10/loadforecasting/raw/main/UNIT%202%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx",
+    "Unit 3": "https://github.com/aguskurniawan10/loadforecasting/raw/main/UNIT%203%20MARET%20SD%20JUNI%20BEBAN%20DIATAS%20180%20MW.xlsx"
 }
 
 # Streamlit App
@@ -24,14 +24,22 @@ url = unit_options[selected_unit]
 # Baca file Excel dari URL dengan requests
 response = requests.get(url)
 if response.status_code == 200:
-    df = pd.read_excel(BytesIO(response.content))
-    df['TIME'] = pd.to_datetime(df['TIME'])
+    try:
+        df = pd.read_excel(BytesIO(response.content))
+        df['TIME'] = pd.to_datetime(df['TIME'])
+    except ValueError:
+        st.error("Gagal membaca file Excel. Pastikan format file valid dan bisa dibuka di Excel.")
+        st.stop()
 else:
     st.error("Gagal mengunduh data. Pastikan URL benar dan dapat diakses.")
     st.stop()
 
 # Ganti nama kolom
 column_target = f'REALISASI MW {selected_unit.split()[1]}'
+if column_target not in df.columns:
+    st.error(f"Kolom '{column_target}' tidak ditemukan dalam dataset. Periksa format file.")
+    st.stop()
+
 df.rename(columns={'TIME': 'ds', column_target: 'y'}, inplace=True)
 
 # Feature Engineering
